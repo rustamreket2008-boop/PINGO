@@ -588,5 +588,32 @@ public class MainActivity extends Activity {
                 .setPositiveButton("Хуб", null)
                 .show();
     }
+private void showSettingsInfo() {
+        new AlertDialog.Builder(this)
+                .setTitle("Танзимот")
+                .setItems(new String[]{
+                        "Тоза кардани ҳамаи Status-ҳо",
+                        "Тоза кардани ҳамаи дӯстҳо"
+                }, (dialog, which) -> {
+                    if (which == 0) {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Тоза кардани Status-ҳо?")
+                                .setNegativeButton("Бекор", null)
+                                .setPositiveButton("Тоза кардан", (d, w) -> {
+                                    statusManager.clearStatuses();
+                                    showPage("Status");
+                                }).show();
+                    } else {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Тоза кардани дӯстҳо?")
+                                .setNegativeButton("Бекор", null)
+                                .setPositiveButton("Тоза кардан", (d, w) -> {
+                                    friendsManager.clearFriends();
+                                    showPage("Чатҳо");
+                                }).show();
+                    }
+                }).show();
+    }
+                            }
 
     
