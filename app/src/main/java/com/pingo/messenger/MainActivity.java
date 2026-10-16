@@ -1,4 +1,3 @@
-
 package com.pingo.messenger;
 
 import android.app.Activity;
@@ -11,10 +10,7 @@ import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.content.Context;
 import android.widget.*;
-import android.text.InputType;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -48,31 +44,31 @@ public class MainActivity extends Activity {
         showPage("Чатҳо");
     }
 
-    private TextView label(String s, int size, int color,
+    private TextView label(String text, int size, int color,
                            boolean bold) {
-        TextView t = new TextView(this);
-        t.setText(s);
-        t.setTextSize(size);
-        t.setTextColor(color);
+        TextView view = new TextView(this);
+        view.setText(text);
+        view.setTextSize(size);
+        view.setTextColor(color);
 
         if (bold) {
-            t.setTypeface(null, Typeface.BOLD);
+            view.setTypeface(null, Typeface.BOLD);
         }
 
-        return t;
+        return view;
     }
 
     private GradientDrawable rounded(int color) {
-        GradientDrawable d = new GradientDrawable();
-        d.setColor(color);
-        d.setCornerRadius(24);
-        return d;
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(color);
+        drawable.setCornerRadius(24);
+        return drawable;
     }
 
     private LinearLayout column() {
-        LinearLayout l = new LinearLayout(this);
-        l.setOrientation(LinearLayout.VERTICAL);
-        return l;
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        return layout;
     }
 
     private void showPage(String page) {
@@ -139,12 +135,15 @@ public class MainActivity extends Activity {
             case "Чатҳо":
                 showChats();
                 break;
+
             case "Status":
                 showStatuses();
                 break;
+
             case "Зангҳо":
                 showCalls();
                 break;
+
             case "Профил":
                 showProfile();
                 break;
@@ -158,10 +157,10 @@ public class MainActivity extends Activity {
         card.setPadding(14, 16, 14, 16);
         card.setBackground(rounded(Color.WHITE));
 
-        LinearLayout.LayoutParams lp =
+        LinearLayout.LayoutParams params =
                 new LinearLayout.LayoutParams(-1, -2);
-        lp.setMargins(0, 0, 0, 12);
-        content.addView(card, lp);
+        params.setMargins(0, 0, 0, 12);
+        content.addView(card, params);
 
         card.addView(label(emoji, 27, dark, false));
 
@@ -177,6 +176,8 @@ public class MainActivity extends Activity {
         card.setOnClickListener(v -> action.run());
     }
 
+    // ==================== CHATS ====================
+
     private void showChats() {
         content.addView(label("Сӯҳбатҳо", 25, dark, true));
         content.addView(label(
@@ -187,7 +188,8 @@ public class MainActivity extends Activity {
         ArrayList<String> friends = friendsManager.getFriends();
 
         if (friends.isEmpty()) {
-            addRow("👋", "Хуш омадӣ!", "Аввал дӯст илова кун",
+            addRow("👋", "Хуш омадӣ!",
+                    "Аввал дӯст илова кун",
                     this::showAddFriendDialog);
         } else {
             for (String friend : friends) {
@@ -199,7 +201,9 @@ public class MainActivity extends Activity {
         Button addFriend = new Button(this);
         addFriend.setText("+ Илова кардани дӯст");
         content.addView(addFriend);
-        addFriend.setOnClickListener(v -> showAddFriendDialog());
+        addFriend.setOnClickListener(
+                v -> showAddFriendDialog()
+        );
 
         Button newChat = new Button(this);
         newChat.setText("+ Чати нав");
@@ -213,13 +217,15 @@ public class MainActivity extends Activity {
                     .setTitle("Чати нав")
                     .setView(input)
                     .setNegativeButton("Бекор", null)
-                    .setPositiveButton("Кушодан", (d, w) -> {
-                        String name = input.getText().toString().trim();
+                    .setPositiveButton("Кушодан", (dialog, which) -> {
+                        String name = input.getText()
+                                .toString().trim();
 
                         if (!name.isEmpty()) {
                             openChat(name);
                         }
-                    }).show();
+                    })
+                    .show();
         });
     }
 
@@ -232,11 +238,13 @@ public class MainActivity extends Activity {
                 .setTitle("Илова кардани дӯст")
                 .setView(input)
                 .setNegativeButton("Бекор", null)
-                .setPositiveButton("Илова", (d, w) -> {
-                    String name = input.getText().toString().trim();
+                .setPositiveButton("Илова", (dialog, which) -> {
+                    String name = input.getText()
+                            .toString().trim();
 
                     if (name.isEmpty()) {
-                        Toast.makeText(this, "Номро навис",
+                        Toast.makeText(this,
+                                "Номро навис",
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -248,7 +256,8 @@ public class MainActivity extends Activity {
                                 "Ин ном холӣ аст ё аллакай вуҷуд дорад",
                                 Toast.LENGTH_SHORT).show();
                     }
-                }).show();
+                })
+                .show();
     }
 
     private void openChat(String name) {
@@ -264,16 +273,21 @@ public class MainActivity extends Activity {
         top.addView(back);
         back.setOnClickListener(v -> showPage("Чатҳо"));
 
-        TextView title = label("   " + name, 19, Color.WHITE, true);
-        top.addView(title, new LinearLayout.LayoutParams(0, -2, 1));
+        TextView title = label("   " + name, 19,
+                Color.WHITE, true);
+        top.addView(title, new LinearLayout.LayoutParams(
+                0, -2, 1
+        ));
 
         TextView options = label("⋮", 26, Color.WHITE, true);
         top.addView(options);
+
         options.setOnClickListener(v ->
                 new AlertDialog.Builder(this)
                         .setTitle(name)
                         .setItems(new String[]{
-                                "Маълумот", "Нест кардани таърихи чат"
+                                "Маълумот",
+                                "Нест кардани таърихи чат"
                         }, (dialog, which) -> {
                             if (which == 0) {
                                 new AlertDialog.Builder(this)
@@ -290,13 +304,16 @@ public class MainActivity extends Activity {
                                                 "Ҳамаи паёмҳои маҳаллии ин чат нест мешаванд."
                                         )
                                         .setNegativeButton("Бекор", null)
-                                        .setPositiveButton("Тоза кардан",
-                                                (dd, ww) -> {
+                                        .setPositiveButton(
+                                                "Тоза кардан",
+                                                (d, w) -> {
                                                     chatStorage.clearMessages(name);
                                                     openChat(name);
-                                                }).show();
+                                                })
+                                        .show();
                             }
-                        }).show()
+                        })
+                        .show()
         );
 
         root.addView(top);
@@ -318,13 +335,14 @@ public class MainActivity extends Activity {
             bubble.setPadding(14, 11, 14, 11);
             bubble.setBackground(rounded(Color.WHITE));
 
-            LinearLayout.LayoutParams p =
+            LinearLayout.LayoutParams params =
                     new LinearLayout.LayoutParams(-2, -2);
-            p.setMargins(0, 0, 0, 9);
-            list.addView(bubble, p);
+            params.setMargins(0, 0, 0, 9);
+            list.addView(bubble, params);
         }
 
         scroll.addView(list);
+
         root.addView(scroll, new LinearLayout.LayoutParams(
                 -1, 0, 1
         ));
@@ -337,6 +355,7 @@ public class MainActivity extends Activity {
         EditText input = new EditText(this);
         input.setSingleLine(true);
         input.setHint("Паём нависед...");
+
         composer.addView(input, new LinearLayout.LayoutParams(
                 0, -2, 1
         ));
@@ -369,6 +388,8 @@ public class MainActivity extends Activity {
         setContentView(root);
     }
 
+    // ==================== STATUS ====================
+
     private void showStatuses() {
         content.addView(label("Status", 25, dark, true));
         content.addView(label(
@@ -388,8 +409,9 @@ public class MainActivity extends Activity {
                     .setTitle("Status-и нав")
                     .setView(input)
                     .setNegativeButton("Бекор", null)
-                    .setPositiveButton("Нашр", (d, w) -> {
-                        String text = input.getText().toString().trim();
+                    .setPositiveButton("Нашр", (dialog, which) -> {
+                        String text = input.getText()
+                                .toString().trim();
 
                         if (statusManager.addStatus(
                                 profileManager.getName(), text)) {
@@ -399,7 +421,8 @@ public class MainActivity extends Activity {
                                     "Матнро навис",
                                     Toast.LENGTH_SHORT).show();
                         }
-                    }).show();
+                    })
+                    .show();
         });
 
         for (JSONObject status : statusManager.getStatuses()) {
@@ -407,8 +430,9 @@ public class MainActivity extends Activity {
             String text = status.optString("text", "");
             long time = status.optLong("time", 0);
 
-            addRow("🟢", user, text + "\n" + formatTime(time), () ->
-                    new AlertDialog.Builder(this)
+            addRow("🟢", user,
+                    text + "\n" + formatTime(time),
+                    () -> new AlertDialog.Builder(this)
                             .setTitle(user)
                             .setMessage(text)
                             .setPositiveButton("Хуб", null)
@@ -417,21 +441,29 @@ public class MainActivity extends Activity {
     }
 
     private String formatTime(long time) {
-        if (time <= 0) return "";
-        java.text.SimpleDateFormat fmt =
+        if (time <= 0) {
+            return "";
+        }
+
+        java.text.SimpleDateFormat format =
                 new java.text.SimpleDateFormat(
-                        "dd.MM HH:mm", Locale.getDefault());
-        return fmt.format(new java.util.Date(time));
+                        "dd.MM HH:mm",
+                        Locale.getDefault()
+                );
+
+        return format.format(new java.util.Date(time));
     }
+
+    // ==================== CALLS ====================
 
     private void showCalls() {
         content.addView(label("Зангҳо", 25, dark, true));
 
-        Button call = new Button(this);
-        call.setText("+ Занги нав");
-        content.addView(call);
+        Button callButton = new Button(this);
+        callButton.setText("+ Занги нав");
+        content.addView(callButton);
 
-        call.setOnClickListener(v -> {
+        callButton.setOnClickListener(v -> {
             ArrayList<String> friends = friendsManager.getFriends();
 
             if (friends.isEmpty()) {
@@ -446,8 +478,11 @@ public class MainActivity extends Activity {
             new AlertDialog.Builder(this)
                     .setTitle("Интихоби дӯст")
                     .setItems(names, (dialog, which) -> {
-                        String name = names[which];
-                        callManager.addCall(name, "voice", "local");
+                        String friendName = names[which];
+
+                        callManager.addCall(
+                                friendName, "voice", "local"
+                        );
 
                         new AlertDialog.Builder(this)
                                 .setTitle("Занги PINGO")
@@ -459,7 +494,8 @@ public class MainActivity extends Activity {
                                 .show();
 
                         showPage("Зангҳо");
-                    }).show();
+                    })
+                    .show();
         });
 
         ArrayList<JSONObject> calls = callManager.getCalls();
@@ -471,19 +507,25 @@ public class MainActivity extends Activity {
             ));
         }
 
-        for (JSONObject call : calls) {
-            String name = call.optString("name", "Корбар");
-            String type = call.optString("type", "voice");
-            String result = call.optString("result", "");
-            String when = formatTime(call.optLong("time", 0));
+        // ИСЛОҲ: callItem ба ҷойи call истифода мешавад.
+        for (JSONObject callItem : calls) {
+            String name = callItem.optString("name", "Корбар");
+            String type = callItem.optString("type", "voice");
+            String result = callItem.optString("result", "");
+            String when = formatTime(
+                    callItem.optLong("time", 0)
+            );
 
-            addRow(type.equals("video") ? "🎥" : "📞",
-                    name, result + " • " + when,
+            addRow(
+                    type.equals("video") ? "🎥" : "📞",
+                    name,
+                    result + " • " + when,
                     () -> new AlertDialog.Builder(this)
                             .setTitle("Таърихи занг")
                             .setMessage(name + "\n" + when)
                             .setPositiveButton("Хуб", null)
-                            .show());
+                            .show()
+            );
         }
 
         Button clear = new Button(this);
@@ -493,14 +535,20 @@ public class MainActivity extends Activity {
         clear.setOnClickListener(v ->
                 new AlertDialog.Builder(this)
                         .setTitle("Тоза кардан?")
-                        .setMessage("Таърихи ҳамаи зангҳо нест шавад?")
+                        .setMessage(
+                                "Таърихи ҳамаи зангҳо нест шавад?"
+                        )
                         .setNegativeButton("Бекор", null)
-                        .setPositiveButton("Тоза кардан", (d, w) -> {
-                            callManager.clearCalls();
-                            showPage("Зангҳо");
-                        }).show()
+                        .setPositiveButton("Тоза кардан",
+                                (dialog, which) -> {
+                                    callManager.clearCalls();
+                                    showPage("Зангҳо");
+                                })
+                        .show()
         );
     }
+
+    // ==================== PROFILE ====================
 
     private void showProfile() {
         content.addView(label("Профили ман", 25, dark, true));
@@ -510,13 +558,15 @@ public class MainActivity extends Activity {
         avatar.setPadding(0, 22, 0, 10);
         content.addView(avatar);
 
-        TextView name = label(profileManager.getName(),
-                20, dark, true);
+        TextView name = label(
+                profileManager.getName(), 20, dark, true
+        );
         name.setGravity(Gravity.CENTER);
         content.addView(name);
 
-        TextView about = label(profileManager.getAbout(),
-                13, Color.DKGRAY, false);
+        TextView about = label(
+                profileManager.getAbout(), 13, Color.DKGRAY, false
+        );
         about.setGravity(Gravity.CENTER);
         about.setPadding(0, 8, 0, 20);
         content.addView(about);
@@ -524,17 +574,18 @@ public class MainActivity extends Activity {
         Button edit = new Button(this);
         edit.setText("✏️ Таҳрири профил");
         content.addView(edit);
-
         edit.setOnClickListener(v -> showEditProfile());
 
         addRow("🔒", "Махфият",
                 "Танзимоти махфият", this::showPrivacyInfo);
 
         addRow("🔔", "Огоҳиномаҳо",
-                "Танзимоти огоҳиномаҳо", this::showNotificationInfo);
+                "Танзимоти огоҳиномаҳо",
+                this::showNotificationInfo);
 
         addRow("⚙️", "Танзимот",
-                "Танзимоти барнома", this::showSettingsInfo);
+                "Танзимоти барнома",
+                this::showSettingsInfo);
     }
 
     private void showEditProfile() {
@@ -553,67 +604,4 @@ public class MainActivity extends Activity {
 
         new AlertDialog.Builder(this)
                 .setTitle("Таҳрири профил")
-                .setView(form)
-                .setNegativeButton("Бекор", null)
-                .setPositiveButton("Сабт", (d, w) -> {
-                    String newName = name.getText().toString().trim();
-                    String newAbout = about.getText().toString().trim();
-
-                    if (!newName.isEmpty()) {
-                        profileManager.setName(newName);
-                    }
-
-                    profileManager.setAbout(newAbout);
-                    showPage("Профил");
-                }).show();
-    }
-
-    private void showPrivacyInfo() {
-        new AlertDialog.Builder(this)
-                .setTitle("Махфият")
-                .setMessage(
-                        "Маълумоти ҳозира дар дохили телефони шумо нигоҳ дошта мешавад. " +
-                        "Барои ҳисоби онлайн ва ҳамоҳангсозии дастгоҳҳо сервер лозим аст."
-                )
-                .setPositiveButton("Хуб", null)
-                .show();
-    }
-
-    private void showNotificationInfo() {
-        new AlertDialog.Builder(this)
-                .setTitle("Огоҳиномаҳо")
-                .setMessage(
-                        "Огоҳиномаҳои паёмҳои онлайн баъд аз пайваст кардани сервер илова мешаванд."
-                )
-                .setPositiveButton("Хуб", null)
-                .show();
-    }
-private void showSettingsInfo() {
-        new AlertDialog.Builder(this)
-                .setTitle("Танзимот")
-                .setItems(new String[]{
-                        "Тоза кардани ҳамаи Status-ҳо",
-                        "Тоза кардани ҳамаи дӯстҳо"
-                }, (dialog, which) -> {
-                    if (which == 0) {
-                        new AlertDialog.Builder(this)
-                                .setTitle("Тоза кардани Status-ҳо?")
-                                .setNegativeButton("Бекор", null)
-                                .setPositiveButton("Тоза кардан", (d, w) -> {
-                                    statusManager.clearStatuses();
-                                    showPage("Status");
-                                }).show();
-                    } else {
-                        new AlertDialog.Builder(this)
-                                .setTitle("Тоза кардани дӯстҳо?")
-                                .setNegativeButton("Бекор", null)
-                                .setPositiveButton("Тоза кардан", (d, w) -> {
-                                    friendsManager.clearFriends();
-                                    showPage("Чатҳо");
-                                }).show();
-                    }
-                }).show();
-    }
-                            }
-
-    
+       
