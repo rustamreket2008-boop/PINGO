@@ -604,4 +604,81 @@ public class MainActivity extends Activity {
 
         new AlertDialog.Builder(this)
                 .setTitle("Таҳрири профил")
-       
+        .setView(form)
+                .setNegativeButton("Бекор", null)
+                .setPositiveButton("Сабт", (dialog, which) -> {
+                    String newName = name.getText()
+                            .toString().trim();
+
+                    String newAbout = about.getText()
+                            .toString().trim();
+
+                    if (!newName.isEmpty()) {
+                        profileManager.setName(newName);
+                    }
+
+                    profileManager.setAbout(newAbout);
+                    showPage("Профил");
+                })
+                .show();
+    }
+
+    private void showPrivacyInfo() {
+        new AlertDialog.Builder(this)
+                .setTitle("Махфият")
+                .setMessage(
+                        "Маълумоти ҳозира дар дохили телефони шумо нигоҳ дошта мешавад. " +
+                        "Барои ҳисоби онлайн ва ҳамоҳангсозии дастгоҳҳо сервер лозим аст."
+                )
+                .setPositiveButton("Хуб", null)
+                .show();
+    }
+
+    private void showNotificationInfo() {
+        new AlertDialog.Builder(this)
+                .setTitle("Огоҳиномаҳо")
+                .setMessage(
+                        "Огоҳиномаҳои паёмҳои онлайн баъд аз пайваст кардани сервер илова мешаванд."
+                )
+                .setPositiveButton("Хуб", null)
+                .show();
+    }
+
+    private void showSettingsInfo() {
+        new AlertDialog.Builder(this)
+                .setTitle("Танзимот")
+                .setItems(new String[]{
+                        "Тоза кардани ҳамаи Status-ҳо",
+                        "Тоза кардани ҳамаи дӯстҳо"
+                }, (dialog, which) -> {
+                    if (which == 0) {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Тоза кардани Status-ҳо?")
+                                .setMessage(
+                                        "Ҳамаи Status-ҳо нест шаванд?"
+                                )
+                                .setNegativeButton("Бекор", null)
+                                .setPositiveButton("Тоза кардан",
+                                        (d, w) -> {
+                                            statusManager.clearStatuses();
+                                            showPage("Status");
+                                        })
+                                .show();
+                    } else {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Тоза кардани дӯстҳо?")
+                                .setMessage(
+                                        "Ҳамаи дӯстҳо нест шаванд?"
+                                )
+                                .setNegativeButton("Бекор", null)
+                                .setPositiveButton("Тоза кардан",
+                                        (d, w) -> {
+                                            friendsManager.clearFriends();
+                                            showPage("Чатҳо");
+                                        })
+                                .show();
+                    }
+                })
+                .show();
+    }
+                                            }
