@@ -1,3 +1,4 @@
+
 package com.pingo.messenger;
 
 import android.app.Activity;
@@ -7,7 +8,7 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class ChatsActivity extends Activity {
+public class ContactsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +20,7 @@ public class ChatsActivity extends Activity {
         layout.setBackgroundColor(Color.rgb(245, 248, 247));
 
         TextView title = new TextView(this);
-        title.setText("💬  Чатҳо");
+        title.setText("👥 Дӯстҳо");
         title.setTextSize(28);
         title.setTextColor(Color.rgb(20, 120, 90));
         title.setGravity(Gravity.CENTER_VERTICAL);
@@ -27,7 +28,7 @@ public class ChatsActivity extends Activity {
         layout.addView(title);
 
         TextView info = new TextView(this);
-        info.setText("Суҳбатҳои шумо дар ин ҷо нишон дода мешаванд.");
+        info.setText("Дар ин ҷо корбаронро ҷустуҷӯ карда метавонед.");
         info.setTextSize(17);
         info.setTextColor(Color.DKGRAY);
         layout.addView(info);
