@@ -42,6 +42,14 @@
             android:exported="false" />
 
         <activity
+            android:name=".CallActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".VideoCallActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
 
